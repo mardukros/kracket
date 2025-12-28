@@ -70,9 +70,9 @@
   ;; Check messages
   (define messages '())
   (let loop ()
-    (when (async-channel-try-get (cognitive-agent-message-queue agent))
-      (set! messages (cons (async-channel-try-get (cognitive-agent-message-queue agent))
-                          messages))
+    (define msg (async-channel-try-get (cognitive-agent-message-queue agent)))
+    (when msg
+      (set! messages (cons msg messages))
       (loop)))
   
   (hash 'nearby-resources nearby-resources

@@ -6,7 +6,8 @@
 ;; message-based coordination.
 
 (require racket/place
-         racket/async-channel)
+         racket/async-channel
+         racket/string)
 
 (provide (all-defined-out))
 
@@ -51,10 +52,12 @@
        (define-values (percept conf) (process-stimulus stimulus))
        (place-channel-put channel
                           (perception-result percept conf id))
-       (printf "[PERCEPTION] Sent result for request ~a\n" id)]
+       (printf "[PERCEPTION] Sent result for request ~a\n" id)
+       (loop)]
       
       ['shutdown
-       (printf "[PERCEPTION AGENT] Shutting down\n")]
+       (printf "[PERCEPTION AGENT] Shutting down\n")
+       (void)]  ; Exit cleanly
       
       [_
        (printf "[PERCEPTION] Unknown message: ~a\n" msg)
@@ -95,10 +98,12 @@
        (define-values (conclusion conf) (apply-reasoning beliefs))
        (place-channel-put channel
                           (reasoning-result conclusion conf id))
-       (printf "[REASONING] Sent result for request ~a\n" id)]
+       (printf "[REASONING] Sent result for request ~a\n" id)
+       (loop)]
       
       ['shutdown
-       (printf "[REASONING AGENT] Shutting down\n")]
+       (printf "[REASONING AGENT] Shutting down\n")
+       (void)]  ; Exit cleanly
       
       [_
        (printf "[REASONING] Unknown message: ~a\n" msg)
@@ -132,10 +137,12 @@
        (define-values (success outcome) (execute-action action-type params))
        (place-channel-put channel
                           (action-result success outcome id))
-       (printf "[ACTION] Sent result for request ~a\n" id)]
+       (printf "[ACTION] Sent result for request ~a\n" id)
+       (loop)]
       
       ['shutdown
-       (printf "[ACTION AGENT] Shutting down\n")]
+       (printf "[ACTION AGENT] Shutting down\n")
+       (void)]  ; Exit cleanly
       
       [_
        (printf "[ACTION] Unknown message: ~a\n" msg)
