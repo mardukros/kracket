@@ -39,3 +39,6 @@ yarn-error.log*
 Thumbs.db
 .Spotlight-V100
 .Trashes
+
+# Cognitive synergy analysis reports
+synergy-report-*.txt
