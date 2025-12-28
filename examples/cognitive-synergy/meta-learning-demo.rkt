@@ -28,7 +28,7 @@
 ;; Macro that automatically tracks and optimizes function performance
 (define-syntax-rule (define-adaptive (name arg ...) body ...)
   (begin
-    ;; Register the strategy
+    ;; Register the strategy using the actual name
     (hash-set! strategy-registry 
                'name 
                (strategy-stats 'name 0 0 0.0))
@@ -39,31 +39,25 @@
       (define result 
         (with-handlers ([exn:fail? 
                          (λ (e) 
-                           (update-strategy-stats! 'name #f 0)
+                           (let ([stats (hash-ref strategy-registry 'name)])
+                             (set-strategy-stats-failures! 
+                              stats 
+                              (+ (strategy-stats-failures stats) 1)))
                            (raise e))])
           (let ([r (begin body ...)])
             (define elapsed (- (current-inexact-milliseconds) start-time))
-            (update-strategy-stats! 'name #t elapsed)
+            (let ([stats (hash-ref strategy-registry 'name)])
+              (set-strategy-stats-successes! 
+               stats 
+               (+ (strategy-stats-successes stats) 1))
+              (set-strategy-stats-avg-time! 
+               stats
+               (/ (+ (* (strategy-stats-avg-time stats) 
+                        (- (strategy-stats-successes stats) 1))
+                     elapsed)
+                  (strategy-stats-successes stats))))
             r)))
       result)))
-
-;; Update strategy statistics
-(define (update-strategy-stats! name success? time)
-  (define stats (hash-ref strategy-registry name))
-  (if success?
-      (begin
-        (set-strategy-stats-successes! 
-         stats 
-         (+ (strategy-stats-successes stats) 1))
-        (set-strategy-stats-avg-time! 
-         stats
-         (/ (+ (* (strategy-stats-avg-time stats) 
-                  (strategy-stats-successes stats))
-               time)
-            (+ (strategy-stats-successes stats) 1))))
-      (set-strategy-stats-failures! 
-       stats 
-       (+ (strategy-stats-failures stats) 1))))
 
 ;; ============================================================================
 ;; MULTIPLE STRATEGIES FOR SAME PROBLEM

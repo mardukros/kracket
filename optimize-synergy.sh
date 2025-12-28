@@ -2,7 +2,7 @@
 # Cognitive Synergy Optimizer
 # Analyzes and optimizes the monorepo for cognitive synergy patterns
 
-set -e
+set -euo pipefail
 
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     COGNITIVE SYNERGY OPTIMIZER FOR ORG-RACKET           ║"
@@ -34,14 +34,16 @@ analyze_integration_density() {
     local require_count=$(grep -r "require" . --include="*.rkt" 2>/dev/null | wc -l)
     
     if [ "$rkt_files" -gt 0 ]; then
-        local density=$(echo "scale=2; $require_count / $rkt_files" | bc)
+        # Use shell arithmetic instead of bc for better portability
+        local density=$((require_count * 100 / rkt_files))
+        local density_display=$((density / 100))
         echo "  ${GREEN}✓${NC} Racket files found: $rkt_files"
         echo "  ${GREEN}✓${NC} Require statements: $require_count"
-        echo "  ${GREEN}✓${NC} Integration density: $density requires/file"
+        echo "  ${GREEN}✓${NC} Integration density: ${density_display}.$(printf "%02d" $((density % 100))) requires/file"
         
-        if (( $(echo "$density > 5" | bc -l) )); then
+        if [ "$density" -gt 500 ]; then
             echo "  ${GREEN}[EXCELLENT]${NC} High integration density!"
-        elif (( $(echo "$density > 2" | bc -l) )); then
+        elif [ "$density" -gt 200 ]; then
             echo "  ${YELLOW}[GOOD]${NC} Moderate integration density"
         else
             echo "  ${YELLOW}[IMPROVEMENT NEEDED]${NC} Low integration density"

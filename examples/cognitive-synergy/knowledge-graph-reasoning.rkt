@@ -78,6 +78,8 @@
   (define new-facts '())
   
   ;; Find all A is-a B and B is-a C, infer A is-a C
+  (define seen-facts (make-hash))  ; Use hash for efficient duplicate checking
+  
   (for* ([f1 kb]
          [f2 kb])
     (match* ((fact-triple f1) (fact-triple f2))
@@ -96,10 +98,12 @@
          (fact (triple a 'is-a c)
                (truth-value combined-strength combined-confidence)))
        
-       ;; Check if already known
-       (unless (member new-fact new-facts)
+       ;; Check if already known using hash
+       (define fact-key (cons a c))
+       (unless (hash-has-key? seen-facts fact-key)
          (printf "[INFERENCE] Inferred: ~a is-a ~a (strength: ~a)\n"
                  a c combined-strength)
+         (hash-set! seen-facts fact-key #t)
          (set! new-facts (cons new-fact new-facts)))]
       [(_ _) (void)]))
   
@@ -112,6 +116,8 @@
   (define new-facts '())
   
   ;; If A is-a B and B has-property P, then A has-property P
+  (define seen-facts (make-hash))  ; Use hash for efficient duplicate checking
+  
   (for* ([f1 kb]
          [f2 kb])
     (match* ((fact-triple f1) (fact-triple f2))
@@ -130,9 +136,12 @@
          (fact (triple a 'has-property p)
                (truth-value combined-strength combined-confidence)))
        
-       (unless (member new-fact new-facts)
+       ;; Check if already known using hash
+       (define fact-key (cons a p))
+       (unless (hash-has-key? seen-facts fact-key)
          (printf "[INFERENCE] Inferred: ~a has-property ~a (strength: ~a)\n"
                  a p combined-strength)
+         (hash-set! seen-facts fact-key #t)
          (set! new-facts (cons new-fact new-facts)))]
       [(_ _) (void)]))
   

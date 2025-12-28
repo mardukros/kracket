@@ -67,14 +67,12 @@
                  (* (percept-confidence p) 0.5)
                  'perception)])))
   
-  ;; Apply knowledge base rules
+  ;; Apply knowledge base rules (deterministic selection)
   (define enhanced-beliefs
-    (for/list ([b beliefs])
-      (define rule (hash-ref knowledge-base 
-                             (string->symbol 
-                              (format "rule~a" 
-                                     (+ 1 (random 3))))
-                             "No rule"))
+    (for/list ([b beliefs] [i (in-naturals)])
+      (define rule-key (string->symbol 
+                        (format "rule~a" (+ 1 (modulo i 3)))))
+      (define rule (hash-ref knowledge-base rule-key "No rule"))
       (printf "[REASONING] Applied rule: ~a\n" rule)
       b))
   
