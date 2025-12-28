@@ -96,4 +96,4 @@
   (test-case "meta-learning"
     (define result (meta-learn '() '(0.6 0.7 0.8)))
     (check-equal? (car result) 'meta-learning)
-    (check-true (assoc 'strategy result))))
+    (check-not-false (assoc 'strategy result))))

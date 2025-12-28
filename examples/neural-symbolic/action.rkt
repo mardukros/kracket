@@ -7,7 +7,13 @@
 
 (provide act
          generate-action
-         execute-action)
+         execute-action
+         get-assoc-value)
+
+;; Helper: safely get value from association list
+(define (get-assoc-value key alist default)
+  (define pair (assoc key alist))
+  (if pair (cadr pair) default))
 
 ;; Main action function
 (define (act reasoning-result)
@@ -22,9 +28,8 @@
 
 ;; Generate action from inference result
 (define (generate-action-from-inference inference)
-  (define confidence-pair (assoc 'combined-confidence inference))
   (define confidence-value 
-    (if confidence-pair (cadr confidence-pair) 0.5))
+    (get-assoc-value 'combined-confidence inference 0.5))
   
   (cond
     [(> confidence-value 0.8)

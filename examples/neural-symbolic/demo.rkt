@@ -9,6 +9,11 @@
          "action.rkt"
          "learning.rkt")
 
+;; Helper function for safe assoc value extraction
+(define (get-assoc-value key alist default)
+  (define pair (assoc key alist))
+  (if pair (cadr pair) default))
+
 (printf "=== Neural-Symbolic Worker Demo ===\n\n")
 
 ;; Create a neural-symbolic worker
@@ -91,8 +96,8 @@
   
   (printf "\n   Cycle complete!\n")
   (printf "   - Perceived: ~a\n" perceived)
-  (define symbolic-pair (assoc 'symbolic reasoning-result))
-  (printf "   - Reasoned: ~a\n" (if symbolic-pair (cadr symbolic-pair) 'none))
+  (printf "   - Reasoned: ~a\n" 
+          (get-assoc-value 'symbolic reasoning-result 'none))
   (printf "   - Action: ~a\n" action-result)
   (printf "   - Learned: ~a\n\n" learning-result))
 
@@ -111,8 +116,8 @@
 (define meta-learning-result (meta-learn '() performance-history))
 (printf "   Performance history: ~a\n" performance-history)
 (printf "   Meta-learning: ~a\n" meta-learning-result)
-(define strategy-pair (assoc 'strategy meta-learning-result))
-(printf "   Strategy: ~a\n\n" (if strategy-pair (cadr strategy-pair) 'unknown))
+(printf "   Strategy: ~a\n\n" 
+        (get-assoc-value 'strategy meta-learning-result 'unknown))
 
 (printf "=== Demo Complete ===\n")
 (printf "\nKey Insights:\n")
