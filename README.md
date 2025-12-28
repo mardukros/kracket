@@ -101,6 +101,19 @@ Racket's unique capabilities make it ideal for cognitive architecture research:
 
 ## Quick Start
 
+**New to Org-Racket?** See **[GETTING_STARTED.md](GETTING_STARTED.md)** for a comprehensive tutorial!
+
+### Run Your First Example
+
+```bash
+# Clone the repository
+git clone https://github.com/mardukros/kracket.git
+cd kracket
+
+# Run a cognitive example
+racket examples/cognitive-synergy/simple-cognitive-loop.rkt
+```
+
 ### For Exploration
 
 ```racket
@@ -147,6 +160,7 @@ Empty lines and comments (starting with `#`) are ignored.
 
 ## Documentation
 
+- **[GETTING_STARTED.md](GETTING_STARTED.md)** - Comprehensive tutorial for newcomers
 - **[COGNITIVE_SYNERGY.md](COGNITIVE_SYNERGY.md)** - Deep dive into cognitive synergy principles and patterns
 - **[INTEGRATION.md](INTEGRATION.md)** - Detailed integration guide and best practices
 - **[SUMMARY.md](SUMMARY.md)** - Implementation summary and demonstrated capabilities

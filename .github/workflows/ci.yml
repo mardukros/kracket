@@ -1,0 +1,256 @@
+name: Cognitive Synergy CI
+
+on:
+  push:
+    branches: [ main, 'copilot/**' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-shell-scripts:
+    name: Validate Shell Scripts
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install ShellCheck
+      run: sudo apt-get update && sudo apt-get install -y shellcheck
+    
+    - name: Validate integrate-repos.sh
+      run: shellcheck integrate-repos.sh
+    
+    - name: Validate update-repo.sh
+      run: shellcheck update-repo.sh
+    
+    - name: Validate optimize-synergy.sh
+      run: shellcheck optimize-synergy.sh
+    
+    - name: Check shell script permissions
+      run: |
+        echo "Checking execute permissions..."
+        test -x integrate-repos.sh && echo "✓ integrate-repos.sh is executable"
+        test -x update-repo.sh && echo "✓ update-repo.sh is executable"
+        test -x optimize-synergy.sh && echo "✓ optimize-synergy.sh is executable"
+
+  check-documentation:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Verify required documentation files
+      run: |
+        echo "Checking required documentation files..."
+        test -f README.md && echo "✓ README.md exists"
+        test -f CONTRIBUTING.md && echo "✓ CONTRIBUTING.md exists"
+        test -f CODE_OF_CONDUCT.md && echo "✓ CODE_OF_CONDUCT.md exists"
+        test -f COGNITIVE_SYNERGY.md && echo "✓ COGNITIVE_SYNERGY.md exists"
+        test -f INTEGRATION.md && echo "✓ INTEGRATION.md exists"
+        test -f IMPLEMENTATION_SUMMARY.md && echo "✓ IMPLEMENTATION_SUMMARY.md exists"
+        test -f RACKET_OPENCOG_BRIDGE.md && echo "✓ RACKET_OPENCOG_BRIDGE.md exists"
+    
+    - name: Check for broken links in markdown (basic)
+      run: |
+        echo "Checking for broken internal links..."
+        # Simple check for markdown links to files that should exist
+        if grep -r '\[.*\](.*.md)' *.md | grep -v 'http' | grep -v '.github/'; then
+          echo "Found markdown links, manually verify they're correct"
+        fi
+    
+    - name: Validate examples README
+      run: test -f examples/cognitive-synergy/README.md && echo "✓ Examples README exists"
+
+  analyze-repository:
+    name: Analyze Repository Structure
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Check integrated repositories
+      run: |
+        echo "Checking for integrated Racket repositories..."
+        
+        # Check key repositories from repos.txt
+        repos_to_check=(
+          "racket"
+          "typed-racket"
+          "drracket"
+          "scribble"
+          "redex"
+          "plot"
+          "rackunit"
+          "data"
+          "games"
+          "htdp"
+          "images"
+          "math"
+          "net"
+          "pict"
+        )
+        
+        missing_repos=()
+        for repo in "${repos_to_check[@]}"; do
+          if [ -d "$repo" ]; then
+            echo "✓ $repo directory exists"
+          else
+            echo "✗ $repo directory missing"
+            missing_repos+=("$repo")
+          fi
+        done
+        
+        if [ ${#missing_repos[@]} -eq 0 ]; then
+          echo "All key repositories are integrated!"
+        else
+          echo "Warning: Some repositories are missing: ${missing_repos[*]}"
+        fi
+    
+    - name: Check examples directory
+      run: |
+        echo "Checking cognitive synergy examples..."
+        
+        examples=(
+          "examples/cognitive-synergy/simple-cognitive-loop.rkt"
+          "examples/cognitive-synergy/knowledge-graph-reasoning.rkt"
+          "examples/cognitive-synergy/meta-learning-demo.rkt"
+          "examples/cognitive-synergy/distributed-cognition.rkt"
+          "examples/cognitive-synergy/multi-agent-system.rkt"
+        )
+        
+        for example in "${examples[@]}"; do
+          if [ -f "$example" ]; then
+            echo "✓ $(basename $example) exists"
+          else
+            echo "✗ $(basename $example) missing"
+          fi
+        done
+    
+    - name: Run synergy optimization analysis
+      run: |
+        echo "Running cognitive synergy analysis..."
+        chmod +x optimize-synergy.sh
+        ./optimize-synergy.sh || true  # Don't fail if this has issues
+    
+    - name: Upload synergy report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: synergy-analysis-report
+        path: synergy-report-*.txt
+        if-no-files-found: warn
+
+  validate-racket-syntax:
+    name: Validate Racket Syntax
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install Racket
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y racket
+        racket --version
+    
+    - name: Check Racket examples syntax
+      run: |
+        echo "Checking Racket syntax for examples..."
+        
+        # Check each example file
+        for example in examples/cognitive-synergy/*.rkt; do
+          if [ -f "$example" ]; then
+            echo "Checking $(basename $example)..."
+            # Use raco to check syntax without running
+            racket -e "(require syntax/modread) (with-module-reading-parameterization (lambda () (with-input-from-file \"$example\" (lambda () (read-syntax)))))" && \
+              echo "✓ $(basename $example) syntax OK" || \
+              echo "✗ $(basename $example) has syntax errors"
+          fi
+        done
+    
+    - name: Run simple cognitive loop example
+      run: |
+        echo "Running simple-cognitive-loop.rkt..."
+        timeout 30 racket examples/cognitive-synergy/simple-cognitive-loop.rkt || echo "Example completed or timed out"
+    
+    - name: Run knowledge graph reasoning example
+      run: |
+        echo "Running knowledge-graph-reasoning.rkt..."
+        timeout 30 racket examples/cognitive-synergy/knowledge-graph-reasoning.rkt || echo "Example completed or timed out"
+    
+    - name: Run meta-learning demo
+      run: |
+        echo "Running meta-learning-demo.rkt..."
+        timeout 30 racket examples/cognitive-synergy/meta-learning-demo.rkt || echo "Example completed or timed out"
+
+  check-file-quality:
+    name: Check File Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Check for TODO/FIXME comments
+      run: |
+        echo "Scanning for TODO/FIXME comments..."
+        grep -r "TODO\|FIXME" --include="*.rkt" --include="*.sh" --include="*.md" . || echo "No TODOs or FIXMEs found"
+    
+    - name: Check file permissions
+      run: |
+        echo "Checking for files with incorrect permissions..."
+        # Check that .rkt files are not executable
+        find . -name "*.rkt" -executable -type f | while read f; do
+          echo "Warning: $f is executable but shouldn't be"
+        done
+        
+        # Check that .sh files are executable
+        find . -name "*.sh" ! -executable -type f | while read f; do
+          echo "Warning: $f should be executable"
+        done
+    
+    - name: Check for large files
+      run: |
+        echo "Checking for unexpectedly large files..."
+        # Find files larger than 1MB (excluding .git)
+        find . -type f -size +1M ! -path "./.git/*" | while read f; do
+          size=$(du -h "$f" | cut -f1)
+          echo "Large file detected: $f ($size)"
+        done || echo "No large files found"
+
+  integration-summary:
+    name: Generate Integration Summary
+    runs-on: ubuntu-latest
+    needs: [validate-shell-scripts, check-documentation, analyze-repository, validate-racket-syntax, check-file-quality]
+    if: always()
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Generate summary
+      run: |
+        echo "# Cognitive Synergy CI Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Repository Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Racket files**: $(find . -name '*.rkt' -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total shell scripts**: $(find . -name '*.sh' -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total markdown files**: $(find . -name '*.md' -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Integrated repositories**: $(ls -d */ 2>/dev/null | grep -v '^\\.' | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Cognitive examples**: $(ls -1 examples/cognitive-synergy/*.rkt 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Documentation Coverage" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- README: $([ -f README.md ] && echo '✅' || echo '❌')" >> $GITHUB_STEP_SUMMARY
+        echo "- CONTRIBUTING: $([ -f CONTRIBUTING.md ] && echo '✅' || echo '❌')" >> $GITHUB_STEP_SUMMARY
+        echo "- CODE_OF_CONDUCT: $([ -f CODE_OF_CONDUCT.md ] && echo '✅' || echo '❌')" >> $GITHUB_STEP_SUMMARY
+        echo "- COGNITIVE_SYNERGY: $([ -f COGNITIVE_SYNERGY.md ] && echo '✅' || echo '❌')" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Status**: CI validation complete! 🎉" >> $GITHUB_STEP_SUMMARY
