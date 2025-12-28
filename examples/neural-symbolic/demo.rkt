@@ -91,7 +91,8 @@
   
   (printf "\n   Cycle complete!\n")
   (printf "   - Perceived: ~a\n" perceived)
-  (printf "   - Reasoned: ~a\n" (cadr (assoc 'symbolic reasoning-result)))
+  (define symbolic-pair (assoc 'symbolic reasoning-result))
+  (printf "   - Reasoned: ~a\n" (if symbolic-pair (cadr symbolic-pair) 'none))
   (printf "   - Action: ~a\n" action-result)
   (printf "   - Learned: ~a\n\n" learning-result))
 
@@ -110,7 +111,8 @@
 (define meta-learning-result (meta-learn '() performance-history))
 (printf "   Performance history: ~a\n" performance-history)
 (printf "   Meta-learning: ~a\n" meta-learning-result)
-(printf "   Strategy: ~a\n\n" (cadr (assoc 'strategy meta-learning-result)))
+(define strategy-pair (assoc 'strategy meta-learning-result))
+(printf "   Strategy: ~a\n\n" (if strategy-pair (cadr strategy-pair) 'unknown))
 
 (printf "=== Demo Complete ===\n")
 (printf "\nKey Insights:\n")

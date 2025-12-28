@@ -22,12 +22,14 @@
 
 ;; Generate action from inference result
 (define (generate-action-from-inference inference)
-  (define confidence (assoc 'combined-confidence inference))
+  (define confidence-pair (assoc 'combined-confidence inference))
+  (define confidence-value 
+    (if confidence-pair (cadr confidence-pair) 0.5))
   
   (cond
-    [(and confidence (> (cadr confidence) 0.8))
+    [(> confidence-value 0.8)
      (list 'action 'assert 'high-confidence)]
-    [(and confidence (> (cadr confidence) 0.5))
+    [(> confidence-value 0.5)
      (list 'action 'explore 'medium-confidence)]
     [else
      (list 'action 'learn 'low-confidence)]))

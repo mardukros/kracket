@@ -151,8 +151,10 @@
       (let ([similar-concepts
              (for/list ([(name emb) (in-hash (neural-worker-embeddings worker))])
                (cons name (cosine-similarity embedding emb)))])
-        (take (sort similar-concepts > #:key cdr) 
-              (min 5 (length similar-concepts))))
+        (if (null? similar-concepts)
+            '()
+            (take (sort similar-concepts > #:key cdr) 
+                  (min 5 (length similar-concepts)))))
       '()))
 
 ;; Cosine similarity between vectors

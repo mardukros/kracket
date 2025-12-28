@@ -100,4 +100,4 @@
   (test-case "hybrid reasoning"
     (define result (hybrid-reason test-kb '(concept dog)))
     (check-equal? (car result) 'hybrid-inference)
-    (check-true (assoc 'combined-confidence result))))
+    (check-not-false (assoc 'combined-confidence result))))
