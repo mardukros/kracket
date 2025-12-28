@@ -1,3 +1,111 @@
 {
-  "prompt": "I need your help implementing an integration between PyTorch neural network tensor embeddings and the workerd generalized supply chain system.\n\n**Context:**\nThis is a workerd-based supply chain management system located at /home/runner/work/wds/wds with:\n- Actors: suppliers, producers, distributors, wholesalers, retailers, marketplaces\n- Relationships between actors\n- Products and services\n- A dynamic lookup/query system\n- Extension architecture in ext/workerd-ext/\n\n**Problem Statement:**\n\"explore how torch nn tensor embeddings could integrate with workerd generalized supply chain to enable integrated erp+scm flow dynamics analysis for a whole network of entities in real time\"\n\n**What I need you to do:**\n1. Design and implement a neural network tensor embedding system that can:\n   - Represent actors, products, relationships as embeddings\n   - Enable real-time flow dynamics analysis across the network\n   - Integrate with the existing workerd extension architecture\n   - Support ERP+SCM analysis capabilities\n\n2. Create the necessary files including:\n   - A new module for tensor embeddings and neural network integration\n   - Configuration for the embedding system\n   - Integration with the existing supply chain lookup system\n   - Examples demonstrating real-time flow analysis\n   - Tests to validate the integration\n\n3. The implementation should:\n   - Follow workerd extension patterns (as seen in ext/workerd-ext/)\n   - Be minimal and focused on the integration\n   - Use capability-based security model\n   - Support real-time analysis of supply chain dynamics\n   - Enable network-wide ERP+SCM flow analysis\n\n**Key Requirements:**\n- Tensor embeddings for actors, products, relationships\n- Neural network layers for flow dynamics prediction\n- Real-time analysis capabilities\n- Integration with existing workerd bindings\n- Support for whole network analysis\n\nPlease implement this integration completely, including all necessary files, configurations, and tests."
+  "name": "neural-symbolic-worker",
+  "version": "1.0.0",
+  "description": "Neural-symbolic worker for Racket cognitive architecture integration",
+  "type": "cognitive-worker",
+  "architecture": {
+    "paradigm": "neural-symbolic-integration",
+    "substrate": "racket-opencog-bridge",
+    "cognitive_components": [
+      "perception",
+      "reasoning",
+      "action",
+      "learning"
+    ]
+  },
+  "capabilities": {
+    "symbolic_reasoning": {
+      "enabled": true,
+      "engine": "pattern-matching",
+      "inference": "forward-chaining",
+      "knowledge_representation": "atomspace"
+    },
+    "neural_processing": {
+      "enabled": true,
+      "embedding_dimension": 128,
+      "learning_rate": 0.001,
+      "architecture_type": "feed-forward",
+      "activation": "tanh"
+    },
+    "integration": {
+      "mode": "bidirectional",
+      "symbolic_to_neural": "embedding",
+      "neural_to_symbolic": "interpretation",
+      "synergy_enabled": true
+    }
+  },
+  "atomspace": {
+    "atom_types": [
+      "ConceptNode",
+      "PredicateNode",
+      "VariableNode",
+      "InheritanceLink",
+      "EvaluationLink",
+      "ImplicationLink"
+    ],
+    "truth_value_model": "simple",
+    "attention_allocation": "ECAN-inspired"
+  },
+  "neural_embeddings": {
+    "atom_embedding": {
+      "dimension": 128,
+      "initialization": "xavier",
+      "trainable": true
+    },
+    "relationship_embedding": {
+      "dimension": 64,
+      "initialization": "xavier",
+      "trainable": true
+    }
+  },
+  "cognitive_cycle": {
+    "perception": {
+      "module": "examples/neural-symbolic/perception.rkt",
+      "input_format": "s-expression"
+    },
+    "reasoning": {
+      "module": "examples/neural-symbolic/reasoning.rkt",
+      "strategy": "hybrid",
+      "symbolic_weight": 0.6,
+      "neural_weight": 0.4
+    },
+    "action": {
+      "module": "examples/neural-symbolic/action.rkt",
+      "output_format": "s-expression"
+    },
+    "learning": {
+      "module": "examples/neural-symbolic/learning.rkt",
+      "strategy": "gradient-based",
+      "meta_learning": true
+    }
+  },
+  "runtime": {
+    "language": "racket",
+    "required_modules": [
+      "racket/base",
+      "racket/match",
+      "racket/contract",
+      "math/matrix"
+    ],
+    "optional_ffi": [
+      "pytorch",
+      "tensorflow"
+    ]
+  },
+  "meta_cognitive": {
+    "self_modification": true,
+    "optimization_strategy": "compile-time-macros",
+    "reflection_enabled": true,
+    "adaptation_threshold": 0.15
+  },
+  "deployment": {
+    "mode": "local",
+    "concurrency": "racket-places",
+    "resource_management": "attention-based",
+    "monitoring": {
+      "cognitive_metrics": true,
+      "performance_tracking": true,
+      "synergy_analysis": true
+    }
+  }
 }
