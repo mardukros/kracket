@@ -86,6 +86,7 @@ Racket's unique capabilities make it ideal for cognitive architecture research:
 - Build symbolic reasoning systems with S-expression knowledge graphs
 - Create neural-symbolic hybrid systems via FFI
 - Explore meta-learning through self-modifying code
+- **NEW: Neural-Symbolic Worker** - Integrated perception-reasoning-action-learning cycle with AtomSpace-inspired knowledge representation
 
 **For Cognitive Scientists:**
 - Model 4E cognition (Embodied, Embedded, Enacted, Extended)
@@ -98,6 +99,7 @@ Racket's unique capabilities make it ideal for cognitive architecture research:
 - Type-safe reasoning with gradual typing
 - Distributed processing with Racket places
 - Interactive development with DrRacket
+- **NEW: Hybrid reasoning** - Combine symbolic pattern matching with neural embeddings
 
 ## Quick Start
 
@@ -112,10 +114,45 @@ cd kracket
 
 # Run a cognitive example
 racket examples/cognitive-synergy/simple-cognitive-loop.rkt
+
+# Run the neural-symbolic worker demo
+racket examples/neural-symbolic/demo.rkt
 ```
 
 ### For Exploration
 
+**Cognitive Synergy Examples:**
+```bash
+# Multi-agent systems
+racket examples/cognitive-synergy/multi-agent-system.rkt
+
+# Meta-learning demonstration
+racket examples/cognitive-synergy/meta-learning-demo.rkt
+
+# Knowledge graph reasoning
+racket examples/cognitive-synergy/knowledge-graph-reasoning.rkt
+```
+
+**Neural-Symbolic Integration:**
+```racket
+#lang racket
+(require "examples/neural-symbolic/neural-worker.rkt")
+
+;; Create a neural-symbolic worker
+(define worker (make-neural-worker))
+
+;; Add symbolic knowledge
+(worker-add-knowledge worker '(concept dog))
+(worker-add-knowledge worker '(concept animal))
+
+;; Hybrid inference (symbolic + neural)
+(worker-process worker '(infer (isa dog animal)))
+
+;; Neural similarity computation
+(worker-process worker '(similar dog))
+```
+
+**Traditional Cognitive Loop:**
 ```racket
 #lang racket
 
@@ -134,6 +171,19 @@ racket examples/cognitive-synergy/simple-cognitive-loop.rkt
     [(adaptive-process strategy)
      (optimize-at-compile-time strategy)]))
 ```
+
+### Neural-Symbolic Worker Configuration
+
+The repository includes a **neural-symbolic worker** configured in `neural-worker-d.json`:
+
+- **Architecture**: Bidirectional neural-symbolic integration
+- **Symbolic Layer**: AtomSpace-inspired knowledge representation
+- **Neural Layer**: 128-dimensional embeddings with cosine similarity
+- **Cognitive Cycle**: Perception → Reasoning → Action → Learning
+- **Capabilities**: Pattern matching, forward chaining, hybrid inference
+- **Meta-Cognition**: Self-reflection and adaptive strategy selection
+
+See `examples/neural-symbolic/README.md` for detailed documentation.
 
 ### For Integration
 
