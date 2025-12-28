@@ -4,22 +4,35 @@ This directory contains practical examples demonstrating cognitive synergy princ
 
 ## Examples
 
-### 1. `simple-cognitive-loop.rkt`
+### 1. `simple-cognitive-loop.rkt` ✅
 A minimal cognitive architecture demonstrating the perception-reasoning-action cycle with component synergy.
 
-### 2. `knowledge-graph-reasoning.rkt`
+**Key concepts:** Perception-Reasoning-Action cycle, emergent behavior, learning from feedback
+
+### 2. `knowledge-graph-reasoning.rkt` ✅
 S-expression-based knowledge graph with inference capabilities, showing symbolic reasoning synergy.
 
-### 3. `meta-learning-demo.rkt`
+**Key concepts:** Knowledge representation, forward/backward chaining, truth value propagation
+
+### 3. `meta-learning-demo.rkt` ✅
 Self-modifying code using macros to demonstrate meta-cognitive capabilities.
 
-### 4. `type-driven-reasoning.rkt`
+**Key concepts:** Meta-learning, self-optimization, adaptive strategies, introspection
+
+### 4. `distributed-cognition.rkt` ✅
+Multi-process cognitive architecture using Racket places for parallel cognitive processing.
+
+**Key concepts:** Distributed processing, message-based coordination, parallel cognition, multi-agent architecture
+
+### 5. `multi-agent-system.rkt` ✅
+Autonomous cognitive agents interacting in a shared environment with emergent collective behavior.
+
+**Key concepts:** Multi-agent systems, emergent intelligence, cooperation and competition, agent communication
+
+### 6. `type-driven-reasoning.rkt` (Planned)
 Integration of Typed Racket with reasoning systems for verified cognition.
 
-### 5. `distributed-cognition.rkt`
-Multi-agent system with attention allocation and distributed processing.
-
-### 6. `neural-symbolic-bridge.rkt`
+### 7. `neural-symbolic-bridge.rkt` (Planned)
 Example of integrating external neural networks with symbolic reasoning in Racket.
 
 ## Running Examples
@@ -34,12 +47,20 @@ Or use DrRacket IDE for interactive exploration.
 
 ## Learning Path
 
-1. Start with `simple-cognitive-loop.rkt` to understand basic architecture
-2. Explore `knowledge-graph-reasoning.rkt` for symbolic AI concepts
-3. Study `meta-learning-demo.rkt` to see meta-cognitive capabilities
-4. Review `type-driven-reasoning.rkt` for verified cognition
-5. Experiment with `distributed-cognition.rkt` for multi-agent systems
-6. Advanced: `neural-symbolic-bridge.rkt` for hybrid intelligence
+### For Beginners
+1. **Start with `simple-cognitive-loop.rkt`** - Understand basic cognitive architecture patterns
+2. **Move to `knowledge-graph-reasoning.rkt`** - Learn symbolic AI and inference
+3. **Explore `meta-learning-demo.rkt`** - Discover meta-cognitive capabilities
+
+### For Intermediate Users
+4. **Study `distributed-cognition.rkt`** - Multi-process cognitive systems
+5. **Experiment with `multi-agent-system.rkt`** - Emergent collective intelligence
+6. **Try `type-driven-reasoning.rkt`** - Verified cognition (when available)
+
+### For Advanced Developers
+7. **Advanced: `neural-symbolic-bridge.rkt`** - Hybrid intelligence (when available)
+8. **Combine examples** - Build larger integrated cognitive systems
+9. **Create your own** - Develop novel cognitive architectures
 
 ## Concepts Demonstrated
 
